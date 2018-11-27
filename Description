@@ -1,0 +1,67 @@
+Group:
+Hassan Mehmood
+Narasimha Krishna
+
+
+Issues and how we Resolve it:
+
+Question:1
+
+
+grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} -' $1 | sort | uniq -c | sort -nr | head -n $2
+
+
+For the first question we used the "grep" command and get know how to develop regexp(regular expressions) to catch all the IP addresses in the log file. we sort all the IP addresses using the "sort" command and count the unique ones using "uniq -c" and then sort them according to the numeric number of their unique count.
+
+Question:2
+
+grep 'HTTP/1.1" [1-3][0-2][0-8]' $1 | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\} -' | sort | uniq -c | sort -nr | head -n $2
+
+Firstly, In this problem we grep the result codes of those lines in log who are in form of 1xx,2xx or 3xx. Information(1xx) ,Success (2xx) , Redirection(3xx) are cater as success codes in this solution. After that we sort them and count the unique IP addreses. 
+
+Question:3
+
+cat $1 | cut -d ' ' -f1,9| sort | uniq -c| sort -gr | head -n $2
+
+For this solution, We use the cat command to catch the file and we use the cut command to catch the IP address in f1 and result cort in f9. Then we find out the unique number of their entries in log file by using "uniq -c".
+
+Question:4
+
+grep 'HTTP/1.1" [4-5][0-9][0-9]' $1 | cut -d ' ' -f1,9| sort | uniq -c | sort -nr | head -n $2
+
+Firstly, In this problem we grep the result codes of those lines in log who are in form of 4xx or 5xx. Client Error(4xx) , Server Error(5xx) are cater as failure codes in this solution. Here f1 is the IP address and f9 catches the failure code. After that we sort them and count the unique IP addreses.
+
+Question: 5
+
+cat $1 | awk '$10!="-"'| cut -d ' ' -f1,10 | sort -n >> Bytes
+cat Bytes| awk '{arr[$1]+=$2} END{for (i in arr) print i, arr[i]}' | sort -nrk 2| head -n $2
+
+
+In this problem, firstly we omit those lines from our log file who are failure using the awk command(i.e: Who are giving null number of bytes in return).Then we catch the number of bytes and the IP address which use this bytes and storing the data in "Bytes". Then adding the number of bytes by unique IP and sorting it out by the ones who uses the most number of bytes.
+
+
+Question: 6
+
+We Read the file line by line and catching its IP address. We used the reverse dig command(dig -x) to find the DNS for this IPaddress and compare this DNS in our blacklist file and then figure out that are we going to blacklist that line in log file or not.
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
